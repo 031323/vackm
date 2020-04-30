@@ -2,18 +2,19 @@ import array
 import subprocess
 import struct
 import time
+import random
+import math
 s0g=343
 class vadanam:
-	def __init__(s, bh0s, m0aa, n0aa):
+	def __init__(s, bh0s, m0aa, n0s):
 		s._bh0s=bh0s
-		s._n0bh0s=int(bh0s*n0aa/m0aa)
+		s._n0bh0s=bh0s-n0s
 		s._m0aa=m0aa
-		s._n0aa=n0aa
 		s._m0d=array.array('f',[0.]*bh0s)
 		s._m0v=array.array('f',[0.]*bh0s)
 		s._n0d=array.array('f',[0.]*s._n0bh0s)
 		s._n0v=array.array('f',[0.]*s._n0bh0s)
-		s._n0s=bh0s-s._n0bh0s
+		s._n0s=n0s
 		if s._n0s==0:s._n0s=1
 		s.m0vi=array.array('f',[1.]*bh0s)
 		s.n0vi=array.array('f',[1.]*s._n0bh0s)
@@ -28,8 +29,8 @@ class vadanam:
 		s._n0a=array.array('f',[0.]*(s._n0bh0s))
 		
 	def yojanam(s,sth,m):
-		s._m0v[int(s._bh0s*sth)]+=m/2
-		s._m0d[int(s._bh0s*sth)]+=m/2
+		s._m0v[sth]+=m/2
+		s._m0d[sth]+=m/2
 	def nirgatih(s):
 		return s._m0v[s._bh0s-1]+s._m0d[s._bh0s-1]+s._n0v[s._n0bh0s-1]+s._n0d[s._n0bh0s-1]
 	def mukhasamsthaanam(s):
@@ -90,21 +91,74 @@ class kriyaa:
 		s.aa0k=aa0k
 		s.a0k=a0k
 		s.kr=kr
+		s.bh=False
 
-def vyaaharanzam(sa,m,k0s):
+
+sa=16000
+def patzhanam(shabdah):
+	varnzaah=[' ']+varnzanirnzayah(shabdah)+[' ']
+	bh0s=44
+	n0s=16
+	m=vadanam(bh0s,0.17,n0s)
+	maat=1
+	ka=0;taa=0.3;moo=0.6;da=0.8;osz=0.99
+	def sv(sv,sth):
+		u0s=[ka,ka,taa,taa,osz,osz,moo,moo,da,da,taa,taa,osz,osz]['अआइईउऊऋॠऌॡएऐओऔ'.index(sv)]
+		vi=[0,1,0,0,0,0,0,0,0,0,0.9,3,1,2]['अआइईउऊऋॠऌॡएऐओऔ'.index(sv)]
+		if sth==n0s+int(u0s*(bh0s-1-n0s)):return 0.05*(1+u0s*vi)
+		elif sth<n0s:return 1
+		else:return 1+(sth-n0s)/(bh0s-n0s-1)*vi*1
+	def gatih(k,aa0k,antar,aa0m,a0m):
+		l0p=(k-aa0k)/antar
+		maat=aa0m+(a0m-aa0m)*l0p
+	def kantzhyam(k,p):
+		p0a=1/600
+		p0k=int(k/p)*p
+		if k-p0k<p0a:
+			m.yojanam(0,maat*4*(k-p0k)*(p0k+p0a-k)/p0a/p0a)
+	def kharah(k,aa0k,sth):
+		m.yojanam(sth,pow(2,aa0k-k)*maat)
+	def uszmaa(k,sth):
+		m.yojanam(sth,maat*random.random())
+	def svarah(k,aa0k,antar,aa0sv,a0sv):
+		l0p=(k-aa0k)/antar
+		for bh in range(0,bh0s):
+			m.m0vi[bh]=aa0sv(bh)*(1-l0p)+a0sv(bh)*l0p
+	def sparshah(k,aa0k,antar,sv,sth,av0p,ga):
+		vi=sv(sth)
+		if av0p>vi:return
+		l0p=(k-aa0k)/antar
+		if ga: m.m0vi[sth]=vi*(1-l0p)+l0p*av0p
+		else: m.m0vi[sth]=vi*l0p+(1-l0p)*av0p
+	def aanunaa(k,aa0k,antar,aa0av,a0av):
+		l0p=(k-aa0k)/antar
+		m.n0vi[0]=(1-l0p)*aa0av+l0p*a0av
+	global k0s
+	k0s=[]
+	
+	
+	kaa=0
+	for v in range(1,len(varnzaah)-1):
+		if varnzaah[v] in 'अआइईउऊऋॠऌॡएऐओऔ':
+			k0s+=[kriyaa(kaa,kaa,lambda k,kaa=kaa,v=v:svarah(k,kaa,0.3,lambda sth:sv(varnzaah[v],sth),lambda sth:sv(varnzaah[v],sth)))]
+			k0s+=[kriyaa(kaa,kaa+0.3,lambda k:kantzhyam(k,1/120))]
+			kaa+=0.3
 	m.naasikaasamsthaanam()
 	m.mukhasamsthaanam()
 	
 	k=0
 	sh=[]
 	sa0s=0
-	while (k<1):#True:
-		#av0s=0
-		#for kr in k0s:
-		#	if kr.a0k>k:
-		#		av0s+=1
-		#		if kr.aa0k<k:kr.kr(m,k)
-		#if av0s==0:break
+	while True:
+		av0s=0
+		for kr in k0s:
+			if kr.a0k>k:
+				av0s+=1
+				if kr.aa0k<k:
+					kr.bh=True
+					kr.kr(k)
+			elif not kr.bh:kr.kr(k)
+		if av0s==0:break
 		
 		k+=m.pravaahah()
 		n0sa0s=int(k*sa)
@@ -114,21 +168,5 @@ def vyaaharanzam(sa,m,k0s):
 			m.mukhasamsthaanam()
 	return sh
 
-sa=16000
-def patzhanam(shabdah):
-	varnzaah=[' ']+varnzanirnzayah(shabdah)+[' ']
-	m=vadanam(44,0.17,0.11)
-	ka=0;ta=0.3;moo=0.6;da=0.8;osz=1
-	def kantzhyam(m,k,p):
-		p0a=1/600
-		p0k=int(k/p)*p
-		if k-p0k<p0a:
-			m.yojanam(0,4*(k-p0k)*(p0k+p0a-k)/p0a/p0a)
-	k0s=[kriyaa(0,1,lambda m,k:kantzhyam(m,k,120))]
-	aa0k=time.time()
-	sh=vyaaharanzam(sa,m,k0s)
-	print(time.time()-aa0k)
-	return sh
-
-def ghoshah(sh):
+def shabdanam(sh):
 	subprocess.run(["aplay","-fFLOAT_LE","-r"+str(sa)],input=struct.pack('f'*len(sh),*sh))
