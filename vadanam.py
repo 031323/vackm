@@ -93,33 +93,35 @@ class kriyaa:
 		s.kr=kr
 		s.bh=False
 
-
 sa=16000
+class maatra:
+	m=1
 def patzhanam(shabdah):
 	varnzaah=[' ']+varnzanirnzayah(shabdah)+[' ']
 	bh0s=44
 	n0s=16
 	m=vadanam(bh0s,0.17,n0s)
-	maat=1
+	maat=maatra()
 	ka=0;taa=0.3;moo=0.6;da=0.8;osz=0.99
 	def sv(sv,sth):
 		u0s=[ka,ka,taa,taa,osz,osz,moo,moo,da,da,taa,taa,osz,osz]['अआइईउऊऋॠऌॡएऐओऔ'.index(sv)]
 		vi=[0,1,0,0,0,0,0,0,0,0,0.9,3,1,2]['अआइईउऊऋॠऌॡएऐओऔ'.index(sv)]
+		if sv in 'इई' and sth > n0s+int(u0s*(bh0s-1-n0s)) and sth<n0s+int((u0s+0.2)*(bh0s-1-n0s)):return 0.1
 		if sth==n0s+int(u0s*(bh0s-1-n0s)):return 0.05*(1+u0s*vi)
-		elif sth<n0s:return 1
+		elif sth<n0s:return 0.5
 		else:return 1+(sth-n0s)/(bh0s-n0s-1)*vi*1
 	def gatih(k,aa0k,antar,aa0m,a0m):
 		l0p=(k-aa0k)/antar
-		maat=aa0m+(a0m-aa0m)*l0p
+		maat.m=aa0m+(a0m-aa0m)*l0p
 	def kantzhyam(k,p):
 		p0a=1/600
 		p0k=int(k/p)*p
 		if k-p0k<p0a:
-			m.yojanam(0,maat*4*(k-p0k)*(p0k+p0a-k)/p0a/p0a)
+			m.yojanam(0,maat.m*4*(k-p0k)*(p0k+p0a-k)/p0a/p0a)
 	def kharah(k,aa0k,sth):
-		m.yojanam(sth,pow(2,aa0k-k)*maat)
+		m.yojanam(sth,pow(10,aa0k-k)/10*maat.m)
 	def uszmaa(k,sth):
-		m.yojanam(sth,maat*random.random())
+		m.yojanam(sth,maat.m*random.random())
 	def svarah(k,aa0k,antar,aa0sv,a0sv):
 		l0p=(k-aa0k)/antar
 		for bh in range(0,bh0s):
@@ -133,16 +135,46 @@ def patzhanam(shabdah):
 	def aanunaa(k,aa0k,antar,aa0av,a0av):
 		l0p=(k-aa0k)/antar
 		m.n0vi[0]=(1-l0p)*aa0av+l0p*a0av
+	def sthaanam(v):
+		if v in 'अआकखगघङ':u0s=ka
+		elif v in 'एऐइईयचछजझञश':u0s=taa
+		elif v in 'ऋॠरटठडढणष':u0s=moo
+		elif v in 'ऌॡलतथदधनस':u0s=da
+		elif v in 'ओऔउऊवपफबभम':u0s=osz
+		else: print(v+' किमेतत्')
+		return n0s+int(u0s*(bh0s-1-n0s))
 	global k0s
 	k0s=[]
-	
-	
 	kaa=0
+	k0s+=[kriyaa(0,0.1,lambda k:aanunaa(k,0,0.1,0,1))]
 	for v in range(1,len(varnzaah)-1):
 		if varnzaah[v] in 'अआइईउऊऋॠऌॡएऐओऔ':
-			k0s+=[kriyaa(kaa,kaa,lambda k,kaa=kaa,v=v:svarah(k,kaa,0.3,lambda sth:sv(varnzaah[v],sth),lambda sth:sv(varnzaah[v],sth)))]
-			k0s+=[kriyaa(kaa,kaa+0.3,lambda k:kantzhyam(k,1/120))]
-			kaa+=0.3
+			sam=0.2
+			if varnzaah[v] in 'आईऊॠॡएऐओऔ':sam*=2
+			aar0s=0.02
+			if varnzaah[v-1] in 'अआइईउऊऋॠऌॡएऐओऔ'+' '+'ह'+'ः':
+				sam+=aar0s
+				k0s+=[kriyaa(kaa,kaa+aar0s,lambda k,aa0k=kaa,antar=aar0s:gatih(k,aa0k,antar,0,1))]
+				k0s+=[kriyaa(kaa,kaa,lambda k,aa0k=kaa,v=v:svarah(k,aa0k,1,lambda sth:sv(varnzaah[v],sth),lambda sth:sv(varnzaah[v],sth)))]
+			elif varnzaah[v-1] in 'कखगघङचछजझञटठडढणतथदधनपफबभमरलवशषस':
+				#k0s+=[kriyaa(kaa,kaa+aar0s,lambda k,aa0k=kaa,antar=aar0s:gatih(k,aa0k,antar,0,1))]
+				k0s+=[kriyaa(kaa,kaa,lambda k,aa0k=kaa,v=v:svarah(k,aa0k,1,lambda sth:sv(varnzaah[v],sth),lambda sth:sv(varnzaah[v],sth)))]
+				k0s+=[kriyaa(kaa,kaa+sam/2,lambda k,aa0k=kaa,antar=sam/2,v=v:sparshah(k,aa0k,antar,lambda sth:sv(varnzaah[v],sth),sthaanam(varnzaah[v-1]),0.0,False))]
+			elif varnzaah[v-1] == 'य':pass
+			
+			if varnzaah[v+1] in 'अआइईउऊऋॠऌॡएऐओऔ'+' '+'ह'+'ः':
+				sam+=aar0s
+				k0s+=[kriyaa(kaa+sam-aar0s,kaa+sam,lambda k,aa0k=kaa+sam-aar0s,antar=aar0s:gatih(k,aa0k,antar,1,0))]
+			elif varnzaah[v+1] in 'कखगघङचछजझञटठडढणतथदधनपफबभमरलवशषस':
+				k0s+=[kriyaa(kaa+sam/2,kaa+sam,lambda k,aa0k=kaa+sam/2,antar=sam/2,v=v:sparshah(k,aa0k,antar,lambda sth:sv(varnzaah[v],sth),sthaanam(varnzaah[v+1]),0.0,True))]
+				#k0s+=[kriyaa(kaa+sam-aar0s,kaa+sam,lambda k,aa0k=kaa+sam-aar0s,antar=aar0s:gatih(k,aa0k,antar,1,0))]
+				
+			k0s+=[kriyaa(kaa,kaa+sam,lambda k:kantzhyam(k,1/120))]
+			kaa+=sam
+		if varnzaah[v] in 'ङञणनम':
+			sam=0.1
+			k0s+=[kriyaa(kaa,kaa,lambda k,aa0k=kaa,v=v:svarah(k,aa0k,1,lambda sth:sv(varnzaah[v-1],sth),lambda sth:sv(varnzaah[v+1],sth)))]
+			k0s+=[kriyaa(kaa,kaa+sam,lambda k:kantzhyam(k,1/120))]
 	m.naasikaasamsthaanam()
 	m.mukhasamsthaanam()
 	
