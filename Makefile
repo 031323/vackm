@@ -1,3 +1,3 @@
 CXX:=clang++
 all:
-	$(CXX) -Wall -fopenmp वदनम्.cpp -o वदनम्
+	$(CXX) -Wall -fopenmp वाचकम्.cpp -o वाचकम् -lSDL2
