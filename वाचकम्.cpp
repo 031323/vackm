@@ -2,6 +2,7 @@
 #include<cstring>
 #include<cmath>
 #include<cstdlib>
+#include<vector>
 #include<SDL2/SDL.h>
 
 typedef float सङ्ख्या;
@@ -82,6 +83,11 @@ public:
 	}
 };
 
+
+enum अक्षरम् {अत्,आत्,इत्,ईत्,उत्,ऊत्,ऋत्,ॠत्,ऌत्,ॡत्,एत्,ऐत्,ओत्,औत्,
+					कः,खः,गः,घः,ङः,चः,छः,जः,झः,ञः,टः,ठः,डः,ढः,णः,तः,थः,दः,धः,नः,पः,फः,बः,भः,मः,यः,रः,लः,वः,शः,षः,सः,हः,
+					विसर्गः,अनुस्वारः,मौनम्};
+
 class वाचकम्
 {
 public:
@@ -89,12 +95,24 @@ public:
 	सङ्ख्या कालः=0;
 	int ग्रहणानि=0;
 	int नैमिषिकानि=16000;
-	वाचकम्():यन्त्रम्(44,16,0.17)
+	class अक्षराणि
 	{
+	public:
+		virtual void क्रमणम्()=0;
+		virtual अक्षरम्  किमिति(int)=0;
+	};
+	अक्षराणि *पाठः;
+	वाचकम्(अक्षराणि &यत्पाठः):यन्त्रम्(44,16,0.17)
+	{
+		पाठः=&यत्पाठः;
 		std::fill_n(यन्त्रम्.मुखविस्तारः,यन्त्रम्.नासिकास्थानम्,0.5);
 		std::fill_n(यन्त्रम्.मुखविस्तारः+यन्त्रम्.नासिकास्थानम्,यन्त्रम्.नासिक्यभागाः,1);
 		std::fill_n(यन्त्रम्.नासिकाविस्तारः,यन्त्रम्.नासिक्यभागाः,1);
 		यन्त्रम्.नासिकाविस्तारः[0]=0;
+	} 
+	
+	void पठनम्()
+	{
 	}
 	सङ्ख्या ग्रहणम्()
 	{
@@ -125,7 +143,25 @@ public:
 
 int main(int argc,char *argv[])
 {
-	वाचकम् मुखम्;
+	class लेखः:public वाचकम्::अक्षराणि
+	{
+	public:
+		std::vector<अक्षरम्> क्रमः;
+		int स्थानम्=0;
+		लेखः(std::vector<अक्षरम्> यत्क्रमः)
+		{
+			क्रमः=यत्क्रमः;
+		}
+		virtual void क्रमणम्(){if(स्थानम्<क्रमः.size()-1)स्थानम्++;}
+		virtual अक्षरम्  किमिति(int अतिक्रमः)
+		{
+			int नवस्थानम्=अतिक्रमः+स्थानम्;
+			if(नवस्थानम्>=0&&नवस्थानम्<क्रमः.size())return क्रमः[नवस्थानम्];
+			else return मौनम्;
+		}
+	};
+	लेखः पाठः({अत्,हः,ओत्});
+	वाचकम् मुखम्(पाठः);
 	auto MyAudioCallback=[](void *userdata, Uint8 *stream, int len)
 	{
 		while(len)
@@ -136,13 +172,22 @@ int main(int argc,char *argv[])
 		}
 	};
 	
-	if (SDL_Init(SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
 			return 1;
-	SDL_AudioSpec want, have;
+	
+	SDL_Window *दर्शनम्=SDL_CreateWindow(
+        "वाचकम्",                  // window title
+        SDL_WINDOWPOS_UNDEFINED,           // initial x position
+        SDL_WINDOWPOS_UNDEFINED,           // initial y position
+        480,                               // width, in pixels
+        480,                               // height, in pixels
+        0                  // flags - see below
+    );
+  SDL_AudioSpec want, have;
 	SDL_AudioDeviceID dev;
 
 	SDL_memset(&want, 0, sizeof(want)); /* or SDL_zero(want) */
-	want.freq = 16000;
+	want.freq = मुखम्.नैमिषिकानि;
 	want.format = AUDIO_F32;
 	want.channels = 1;
 	want.samples = 4096;
@@ -152,11 +197,24 @@ int main(int argc,char *argv[])
 	dev = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);
 	if (dev == 0) {
 	    return 1;
-	} 
+	}
 	SDL_PauseAudioDevice(dev, 0); /* start audio playing. */
-	int x;
-	std::cin>>x;
-	SDL_CloseAudioDevice(dev);
 	
+	bool वर्त्तनम्=true;
+	while (वर्त्तनम्) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        /* handle your event here */
+    	if(event.type==SDL_KEYDOWN)
+      {
+				if(event.key.keysym.sym == SDLK_ESCAPE)वर्त्तनम्=false;
+			}
+    }
+		SDL_Delay(16);
+    /* do some other stuff here -- draw your app, etc. */
+	}
+	SDL_DestroyWindow(दर्शनम्);
+	SDL_CloseAudioDevice(dev);
+	SDL_Quit();
 	return 0;
 }
