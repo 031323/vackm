@@ -2,7 +2,6 @@
 #include<cstring>
 #include<cmath>
 #include<cstdlib>
-#include<vector>
 #include<SDL2/SDL.h>
 
 typedef float सङ्ख्या;
@@ -184,7 +183,6 @@ public:
 	वाचकम्(const वाचकम् &)=delete;
 	वाचकम्& operator=(const वाचकम् &)=delete;
 	
-	
 	class प्रयत्नः
 	{
 		char अन्वयः[128];
@@ -211,14 +209,34 @@ public:
 		else throw(मूलम्);
 	}
 	
+	सङ्ख्या प्रयत्नकालः=0;
+	
 	सङ्ख्या कण्ठ्यमात्रा=0;
 	सङ्ख्या कण्ठ्यान्तरम्=1/120.0;
+	/*
+	अत्,आत्,इत्,ईत्,उत्,ऊत्,ऋत्,ॠत्,ऌत्,ॡत्,एत्,ऐत्,ओत्,औत्,
+	कः,खः,गः,घः,ङः,चः,छः,जः,झः,ञः,टः,ठः,डः,ढः,णः,तः,थः,दः,धः,नः,पः,फः,बः,भः,मः,यः,रः,लः,वः,शः,षः,सः,हः,
+	विसर्गः,अनुस्वारः,मौनम्
+	*/
+	वर्णः स्वराः[]={अत्,आत्,इत्,ईत्,उत्,ऊत्,ऋत्,ॠत्,ऌत्,ॡत्,एत्,ऐत्,ओत्,औत्},
+		
 	
+	void पठनम्()
+	{
+		प्रयत्नसङ्ख्या=0;
+		सङ्ख्या अवधिः=0.3;
+		वर्णः पूर्वः=पाठः.पठनम्(-1),पश्चिमः=पाठः.पठनम्(1),उपस्थितः=पाठः.पठनम्();
+		
+		
+		प्रयत्नकालः+=अवधिः;
+	}
 	
 	सङ्ख्या ग्रहणम्()
 	{
 		while(true)
 		{
+			if(कालः>=प्रयत्नकालः)पठनम्();
+			
 			{
 				सङ्ख्या कण्ठ्यम्=0;
 				if(कण्ठ्यमात्रा)
@@ -258,12 +276,16 @@ int main(int argc,char *argv[])
 	वाचकम् मुखम्({(वर्णः (*)(void*))([](void* d){return (*static_cast<decltype(क्रमणम्)*>(d))();}),&क्रमणम्});
 	auto MyAudioCallback=[](void *userdata, Uint8 *stream, int len)
 	{
+		clock_t आरम्भकालः=clock();
 		while(len)
 		{
 			*((सङ्ख्या*)stream)=((वाचकम्*)userdata)->ग्रहणम्();
 			stream+=sizeof(सङ्ख्या);
 			len-=sizeof(सङ्ख्या);
 		}
+		clock_t अन्तकालः=clock();
+		double अवधिः=double(अन्तकालः-आरम्भकालः);
+		std::cout<<अवधिः/CLOCKS_PER_SEC<<std::endl;
 	};
 	
 	if (SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
@@ -289,7 +311,7 @@ int main(int argc,char *argv[])
 	want.freq = मुखम्.नैमिषिकानि;
 	want.format = AUDIO_F32;
 	want.channels = 1;
-	want.samples = 4096;
+	want.samples = मुखम्.नैमिषिकानि;//4096;
 	want.callback = MyAudioCallback; /* you wrote this function elsewhere -- see SDL_AudioSpec for details */
 	want.userdata=&मुखम्;
 	
