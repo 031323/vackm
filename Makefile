@@ -1,3 +1,3 @@
 CXX:=clang++
 all:
-	$(CXX) -Wall वाचकम्.cpp -o वाचकम् -lSDL2
+	$(CXX) -g -std=c++20 -Wall वाचकम्.cpp -o वाचकम् -lSDL2
