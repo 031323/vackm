@@ -5,4 +5,4 @@
 इ॒दं प्रयु॑क्तम् अ॒स्मिन् - [Pink Trombone](https://dood.al/pinktrombone)
 
 ## प्रभावः
-"रा॒मस्य॑ भा॒र्या॑ सी॒ता वनं॑ ग॒ता।" **इ**ति वा**क्य**स्य ध्व**निः** **क**थम् उत्पत्स्यत **इ**ति यन्त्रचाल**नं** [वि**नाऽ**त्र](https://raw.githubusercontent.com/031323/vackm/master/samples/rāmásyabhāryā̀sītā́vánaṃgatā́.mp3) दृश्यताम्। अ**यं** ध्व**निः** [**स**स्वरेण **स**र्गेण](https://github.com/031323/vackm/commit/420c710eaef6730fb67f7537c3a5d6cae2196787) जनि**तः**।
+"रा॒मस्य॑ भा॒र्या॑ सी॒ता वनं॑ ग॒ता।" **इ**ति वा**क्य**स्य ध्व**निः** **क**थम् उत्पत्स्यत **इ**ति यन्त्रचाल**नं** [वि**नाऽ**त्र](https://raw.githubusercontent.com/031323/vackm/master/samples/rāmásyabhāryā̀sītā́vánaṃgatā́.mp3) दृश्यताम्।
