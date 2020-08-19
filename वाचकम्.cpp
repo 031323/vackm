@@ -706,9 +706,9 @@ int main(int argc,char *argv[])
 		clock_t आरम्भकालः=clock();
 		while(len)
 		{
-			*((सङ्ख्या*)stream)=((वाचकम्*)userdata)->ग्रहणम्();
-			stream+=sizeof(सङ्ख्या);
-			len-=sizeof(सङ्ख्या);
+			*((float*)stream)=((float*)userdata)->ग्रहणम्();
+			stream+=sizeof(float);
+			len-=sizeof(float);
 		}
 		clock_t अन्तकालः=clock();
 		double अवधिः=double(अन्तकालः-आरम्भकालः);
