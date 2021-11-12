@@ -4,6 +4,7 @@
 #include<cmath>
 #include<cstdlib>
 #include<SDL2/SDL.h>
+#include<algorithm>
 
 typedef double सङ्ख्या;
 
